@@ -1,115 +1,248 @@
-import Image from "next/image";
-import localFont from "next/font/local";
+import React, { useState } from 'react';
+import { PlusCircle, Trash2, Save, Play } from 'lucide-react';
+import { 
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle 
+} from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const QuizCreator = () => {
+  const [title, setTitle] = useState('');
+  const [questions, setQuestions] = useState([{
+    question: '',
+    options: ['', '', '', ''],
+    correctAnswer: 0
+  }]);
+  const [showSuccess, setShowSuccess] = useState(false);
 
-export default function Home() {
+  const addQuestion = () => {
+    setQuestions([...questions, {
+      question: '',
+      options: ['', '', '', ''],
+      correctAnswer: 0
+    }]);
+  };
+
+  const removeQuestion = (index) => {
+    const newQuestions = questions.filter((_, i) => i !== index);
+    setQuestions(newQuestions);
+  };
+
+  const updateQuestion = (index, field, value) => {
+    const newQuestions = [...questions];
+    if (field === 'option') {
+      const [optionIndex, optionValue] = value;
+      newQuestions[index].options[optionIndex] = optionValue;
+    } else {
+      newQuestions[index][field] = value;
+    }
+    setQuestions(newQuestions);
+  };
+
+  const handleSubmit = async () => {
+    // TODO: Implement API call to save quiz
+    setShowSuccess(true);
+  };
+
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              pages/index.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="max-w-4xl mx-auto p-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Create New Quiz</CardTitle>
+          <CardDescription>Design your multiple choice quiz</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium mb-2">Quiz Title</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded-md"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter quiz title"
+              />
+            </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            {questions.map((q, qIndex) => (
+              <Card key={qIndex} className="p-4">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-medium">Question {qIndex + 1}</h3>
+                    <button
+                      onClick={() => removeQuestion(qIndex)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </button>
+                  </div>
+
+                  <input
+                    type="text"
+                    className="w-full p-2 border rounded-md"
+                    value={q.question}
+                    onChange={(e) => updateQuestion(qIndex, 'question', e.target.value)}
+                    placeholder="Enter question"
+                  />
+
+                  <div className="space-y-2">
+                    {q.options.map((option, oIndex) => (
+                      <div key={oIndex} className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          name={`correct-${qIndex}`}
+                          checked={q.correctAnswer === oIndex}
+                          onChange={() => updateQuestion(qIndex, 'correctAnswer', oIndex)}
+                        />
+                        <input
+                          type="text"
+                          className="flex-1 p-2 border rounded-md"
+                          value={option}
+                          onChange={(e) => updateQuestion(qIndex, 'option', [oIndex, e.target.value])}
+                          placeholder={`Option ${oIndex + 1}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+            ))}
+
+            <div className="flex justify-between">
+              <button
+                onClick={addQuestion}
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-800"
+              >
+                <PlusCircle className="h-5 w-5" />
+                <span>Add Question</span>
+              </button>
+
+              <button
+                onClick={handleSubmit}
+                className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+              >
+                <Save className="h-5 w-5" />
+                <span>Save Quiz</span>
+              </button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <AlertDialog open={showSuccess}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Quiz Created Successfully!</AlertDialogTitle>
+            <AlertDialogDescription>
+              Your quiz has been saved and is ready to share.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setShowSuccess(false)}>Continue</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
-}
+};
+
+const QuizParticipation = () => {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+
+  // Mock quiz data - replace with API call
+  const quiz = {
+    title: "Sample Quiz",
+    questions: [
+      {
+        question: "What is the capital of France?",
+        options: ["London", "Berlin", "Paris", "Madrid"],
+        correctAnswer: 2
+      },
+      // Add more questions...
+    ]
+  };
+
+  const handleAnswer = (answerIndex) => {
+    const newAnswers = [...answers];
+    newAnswers[currentQuestion] = answerIndex;
+    setAnswers(newAnswers);
+
+    if (currentQuestion < quiz.questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setShowResults(true);
+    }
+  };
+
+  const calculateScore = () => {
+    return answers.reduce((score, answer, index) => {
+      return score + (answer === quiz.questions[index].correctAnswer ? 1 : 0);
+    }, 0);
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto p-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>{quiz.title}</CardTitle>
+          <CardDescription>
+            Question {currentQuestion + 1} of {quiz.questions.length}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {!showResults ? (
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium">
+                {quiz.questions[currentQuestion].question}
+              </h3>
+              <div className="space-y-2">
+                {quiz.questions[currentQuestion].options.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswer(index)}
+                    className="w-full p-3 text-left border rounded-md hover:bg-gray-50"
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="text-center space-y-4">
+              <h3 className="text-xl font-medium">Quiz Complete!</h3>
+              <p className="text-lg">
+                Your score: {calculateScore()} out of {quiz.questions.length}
+              </p>
+              <button
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                onClick={() => {
+                  setCurrentQuestion(0);
+                  setAnswers([]);
+                  setShowResults(false);
+                }}
+              >
+                <Play className="h-5 w-5 inline mr-2" />
+                Try Again
+              </button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export { QuizCreator, QuizParticipation };

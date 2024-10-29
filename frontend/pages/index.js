@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle 
-} from "@/components/ui/card";
+} from "@/components/ui/card"; // Ensure this path is correct
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +15,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog"; // Ensure this path is correct
 
 const QuizCreator = () => {
   const [title, setTitle] = useState('');
@@ -76,7 +76,7 @@ const QuizCreator = () => {
             </div>
 
             {questions.map((q, qIndex) => (
-              <Card key={qIndex} className="p-4">
+              <div key={qIndex} className="border rounded-md p-4">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-medium">Question {qIndex + 1}</h3>
@@ -116,7 +116,7 @@ const QuizCreator = () => {
                     ))}
                   </div>
                 </div>
-              </Card>
+              </div>
             ))}
 
             <div className="flex justify-between">
@@ -245,4 +245,5 @@ const QuizParticipation = () => {
   );
 };
 
+// Export both components for use in other files
 export { QuizCreator, QuizParticipation };
